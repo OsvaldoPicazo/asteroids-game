@@ -33,7 +33,7 @@ window.onload = function () {
     const shipWidth = 50;
     const shipHeight = 50;
     const shipPosX =  (canvas.width/2) - (shipWidth/2);
-    const shipPosY =  (canvas.height/2) + (shipHeight/2);
+    const shipPosY =  (canvas.height/2) - (shipHeight/2);
     const shipColor = 'white';
 
     // fixed asteroid values
@@ -47,7 +47,7 @@ window.onload = function () {
     // changing asteroid values
     let asteroidPosX = 0;
     let asteroidPosY = 0;
-    let asteroidDirection = 0;  // direcition in degrees, 0 = X-axis 
+    let asteroidDirection = 0;  // direction in degrees, 0 = X-axis 
 
     //collision flag
     let collision = false;
@@ -61,7 +61,7 @@ window.onload = function () {
     const ship = new Ship (ctx, shipPosX, shipPosY, shipWidth, shipHeight, shipColor, shipAngle);
 
     // asteroids array, empty
-    const asteroidsArray = [];
+    let asteroidsArray = [];
 
     //--------------------------------------------------------------------------------------------------------
     //                                    Part 3: Functions (game logic)
@@ -71,7 +71,9 @@ window.onload = function () {
     function update () {
         updateCanvas();
         updateShip()
-        //updateAsteroids();
+        updateAsteroids();
+        //test
+        removeAsteroids();
     }
 
     // update canvas
@@ -88,11 +90,10 @@ window.onload = function () {
 
     // update asteroids
     function updateAsteroids () {
-        //asteroidsArray.forEach((element) => {
+        asteroidsArray.forEach((asteroid) => {
             asteroid.draw();
           //asteroid.move();
-          //checkCollision(ship,element)
-        //});
+            });
     }
     
     // create random asteroids
@@ -109,7 +110,19 @@ window.onload = function () {
             asteroidColor,
             asteroidDirection   // random
         );
+        
+        // add asteroid to array
+        asteroidsArray.push(asteroid);
+    }
 
+    // remove obstacle from array: when the go too far away from the canvas
+    function removeAsteroids() {
+        asteroidsArray = asteroidsArray.filter(function (asteroid) {
+            return (asteroid.x > (-2*asteroid.width) &&             // left limit
+            asteroid.x < (canvas.width + 2*asteroid.width) &&       // right limit
+            asteroid.y > (-2*asteroid.height) &&                    // top limit
+            asteroid.y < (canvas.height + 2*asteroid.height));      // bottom limit
+        });
     }
 
     // generate random asteroid origin coordinates, just outside and around the canvas
@@ -141,10 +154,15 @@ window.onload = function () {
 
         frameId = requestAnimationFrame(startGame);
 
-        console.log("Game started")
+        //test loop
+        console.log(asteroidsArray.length);
+        //console.log("Game started")
 
         update();
     }
+
+    // create new asteroids
+    asteroidsId = setInterval (createAsteroids, 1000);
 
     //--------------------------------------------------------------------------------------------------------
     //                                    Part 5: Event listeners
@@ -155,9 +173,6 @@ window.onload = function () {
         startGame();
 
         //testing only
-        createAsteroids();
-        //randomAsteroidOrigin();
-        //randomAsteroidDirection();
         console.log(asteroidPosX, asteroidPosY, asteroidDirection);
         // end of test area
 
