@@ -36,37 +36,32 @@ window.onload = function () {
     const shipPosY =  (canvas.height/2) + (shipHeight/2);
     const shipColor = 'white';
 
-    // fixed obstacle values
-    const obstacleWidth = 100;
-    const obstacleHeight = 100;
-    const obstacleColor = 'red';
+    // fixed asteroid values
+    const asteroidWidth = 50;
+    const asteroidHeight = 50;
+    const asteroidColor = 'red';
 
     //changing ship values
-    let shipAngle = 0;
+    let shipAngle = 0;     // in degrees
 
-    // changing obstacle values
-    let obstaclePosX = 0;
-    let obstaclePosY = 0;
+    // changing asteroid values
+    let asteroidPosX = 0;
+    let asteroidPosY = 0;
+    let asteroidDirection = 0;  // direcition in degrees, 0 = X-axis 
 
     //collision flag
     let collision = false;
 
     //setInterval IDs
     let frameId = null;       // game loop
-    let obstaclesId = null;   // obstacles frequency
+    let asteroidsId = null;   // asteroid frequency
 
-    //Background, ship and obstacle objects
+    //Background, ship and asteroid objects
     const background = new Background (ctx, canvas.width, canvas.height, backgroundColor);
     const ship = new Ship (ctx, shipPosX, shipPosY, shipWidth, shipHeight, shipColor, shipAngle);
-    
-    let asteroid = new Obstacle (
-        ctx,
-        obstaclePosX,       // changing
-        obstaclePosY,       // changing
-        obstacleWidth,
-        obstacleHeight,
-        obstacleColor
-    );
+
+    // asteroids array, empty
+    const asteroidsArray = [];
 
     //--------------------------------------------------------------------------------------------------------
     //                                    Part 3: Functions (game logic)
@@ -76,7 +71,7 @@ window.onload = function () {
     function update () {
         updateCanvas();
         updateShip()
-        updateObstacles();
+        //updateAsteroids();
     }
 
     // update canvas
@@ -91,13 +86,51 @@ window.onload = function () {
         ship.draw();
     }   
 
-    function updateObstacles () {
-        //obstaclesArray.forEach((element) => {
+    // update asteroids
+    function updateAsteroids () {
+        //asteroidsArray.forEach((element) => {
             asteroid.draw();
-          //ship.move();
+          //asteroid.move();
           //checkCollision(ship,element)
         //});
-    }   
+    }
+    
+    // create random asteroids
+    function createAsteroids () {
+        randomAsteroidOrigin();
+        randomAsteroidDirection();
+
+        let asteroid = new Asteroid (
+            ctx,
+            asteroidPosX,       // random
+            asteroidPosY,       // random
+            asteroidWidth,
+            asteroidHeight,
+            asteroidColor,
+            asteroidDirection   // random
+        );
+
+    }
+
+    // generate random asteroid origin coordinates, just outside and around the canvas
+    function randomAsteroidOrigin () {
+        asteroidPosX = Math.round(Math.random()*(canvas.width+2*asteroidWidth)) - asteroidWidth;            // created just outside the canvas
+        if (asteroidPosX + asteroidWidth <= 0 || asteroidPosX >= canvas.width) {
+            asteroidPosY = Math.round(Math.random()*(canvas.height+2*asteroidHeight)) - asteroidHeight;     // if ouside canvas width then it is free to randomly create the position y
+        } else {
+            if (Math.round(Math.random()) * 2 -1 > 0) {
+                asteroidPosY = canvas.height                                                                 // if posX inside the canvas, then posY must be outside the canvas height
+            }
+            else {
+                asteroidPosY = 0 - asteroidHeight;
+            }
+        }
+    }
+
+    // generate random direction 
+    function randomAsteroidDirection () {
+        asteroidDirection = Math.random()*360;
+    }
 
     //--------------------------------------------------------------------------------------------------------
     //                                    Part 4: SetIntervals
@@ -118,8 +151,16 @@ window.onload = function () {
     //--------------------------------------------------------------------------------------------------------
 
     btnStart.addEventListener('click', (event) => {
+        
         startGame();
-        //console.log(event.currentTarget)
+
+        //testing only
+        createAsteroids();
+        //randomAsteroidOrigin();
+        //randomAsteroidDirection();
+        console.log(asteroidPosX, asteroidPosY, asteroidDirection);
+        // end of test area
+
         event.currentTarget.disabled = true;
       });
 

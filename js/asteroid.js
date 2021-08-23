@@ -1,17 +1,18 @@
 //------------------------------------------------------------------------------------------------------------
-//                                    Obstacle class
+//                                    Asteroid class
 //------------------------------------------------------------------------------------------------------------
 
-class Obstacle {
+class Asteroid {
 
-    constructor (canvasContext, positionX, positionY, width, height, color) {
+    constructor (canvasContext, positionX, positionY, width, height, color, direction) {
         this.ctx = canvasContext;
         this.x = positionX;
         this.y = positionY;
         this.width = width;
         this.height = height;
         this.color = color;
-        
+        this.direction = direction;
+
         this.speedX = 0;
         this.speedY = 0;
     }
