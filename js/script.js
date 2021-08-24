@@ -27,7 +27,9 @@ window.onload = function () {
     //--------------------------------------------------------------------------------------------------------
 
     const fps = 30;         // game framerate
-    const dt = 1000/fps;     // delta time = 33ms, for the game setInterval
+    const dt = 1000/fps;    // delta time = 33ms, for the game setInterval
+    const winScore = 20;    // score to win
+    let score = 0;          // game score
 
     //fixed background values
     const backgroundColor = 'black';
@@ -92,7 +94,10 @@ window.onload = function () {
         updateBullets();
 
         //test
-        console.log("bullets in array: ", bulletsArray.length);
+        console.log("bullets: ", bulletsArray.length);
+        console.log("asteroids: ", asteroidsArray.length);
+        console.log("score: ", score);
+        //console.log("bulletsId: ", bulletsId);
     }
 
     // update canvas
@@ -118,12 +123,16 @@ window.onload = function () {
         removeAsteroids();
     }
 
+    // update bullets
     function updateBullets () {
+
+        // iterate through each bullet
         bulletsArray.forEach((bullet, i) => {
             bullet.draw();
             bullet.move();
+            // iterate through each asteroid
             asteroidsArray.forEach((asteroid, j) => {
-                checkHit(bullet, asteroid, i, j);
+                checkHit(bullet, asteroid, i, j);       // check collision for each bullet-asteroid combination
             });
         });
 
@@ -219,10 +228,10 @@ window.onload = function () {
     // remove bullets from the array when they go outside the canvas
     function removeBullets() {
         bulletsArray = bulletsArray.filter(function (bullet) {
-            return (bullet.x > (-2*bullet.width) &&             // left limit
-            bullet.x < (canvas.width + 2*bullet.width) &&       // right limit
-            bullet.y > (-2*bullet.height) &&                    // top limit
-            bullet.y < (canvas.height + 2*bullet.height));      // bottom limit
+            return (bullet.x > -bullet.width &&     // left limit
+            bullet.x < canvas.width &&              // right limit
+            bullet.y > -bullet.height &&            // top limit
+            bullet.y < canvas.height);              // bottom limit
         });
     }
 
@@ -237,12 +246,12 @@ window.onload = function () {
         // if there is a hit, remove the asteroid and bullet from their array
         if (hit) {
             bulletsArray.splice(indexI, 1);
-        
-            // remove asteroid too
             asteroidsArray.splice(indexJ, 1);
-
-            // set hit flag back to false
-            hit = false;
+            hit = false;    // set hit flag back to false
+            score ++;       // increase score
+            if (score === winScore) {
+                winGame();      // if you reach the win score the game finishes
+            }
           };
     }
 
@@ -251,24 +260,24 @@ window.onload = function () {
         event.preventDefault();
         switch (event.keyCode) {
             case 38:            // up arrow
-                ship.speedY = -4;
+                ship.speedY = -6;
             break;
             case 40:            // down arrow
-                ship.speedY = 4;
+                ship.speedY = 6;
             break;
             case 37:            // left arrow
-                ship.speedX = -4;
+                ship.speedX = -6;
             break;
             case 39:            // right arrow
-                ship.speedX = 4;
+                ship.speedX = 6;
             break;
             case 87:            // "w": shoot front bullets
                 if (event.repeat) {
                     break;      // do nothing when event is in repeat mode
                 }
                 else {
-                    createBullets();                                // create the first bullet
                     bulletsId = setInterval(createBullets, 250);    // rapid fire bullets 
+                    createBullets();                                // create the first bullet
                     break;
                 }
         }
@@ -304,14 +313,14 @@ window.onload = function () {
         frameId = setInterval(update, dt);
 
         // create new asteroids
-        asteroidsId = setInterval (createAsteroids, 500);
+        asteroidsId = setInterval (createAsteroids, 150);
 
         //test
         console.log("Game started")
     }
 
     //--------------------------------------------------------------------------------------------------------
-    //                                    Part 5: Game Over function
+    //                                    Part 5: Game Over and Win functions
     //--------------------------------------------------------------------------------------------------------
 
     function gameOver () {
@@ -319,6 +328,14 @@ window.onload = function () {
         clearInterval(asteroidsId);
         clearInterval(bulletsId);
         alert("Game Over");
+        window.location.reload();
+    }
+
+    function winGame () {
+        clearInterval(frameId);
+        clearInterval(asteroidsId);
+        clearInterval(bulletsId);
+        alert(`You win! ${winScore} asteroids destroyed`);
         window.location.reload();
     }
 
