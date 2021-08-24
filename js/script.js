@@ -52,8 +52,9 @@ window.onload = function () {
     let asteroidPosY = 0;
     let asteroidDirection = 0;  // direction in degrees, 0 = X-axis 
 
-    //collision flag
-    let collision = false;
+    // flags
+    let collision = false;      // true if asteroid hits ship
+    let hit = false;            // true if bullet hits asteroid
 
     //setInterval IDs
     let frameId = null;       // game loop
@@ -75,7 +76,6 @@ window.onload = function () {
         updateCanvas();
         updateShip()
         updateAsteroids();
-        removeAsteroids();
 
         //test
         console.log(asteroidsArray.length);
@@ -99,7 +99,10 @@ window.onload = function () {
         asteroidsArray.forEach((asteroid) => {
             asteroid.draw();
             asteroid.move();
+            checkCollision(ship, asteroid, collision);
             });
+
+        removeAsteroids();
     }
     
     // create random asteroids
@@ -131,6 +134,23 @@ window.onload = function () {
         });
     }
 
+    // check for collisions 
+    function checkCollision (element, asteroid, event) {
+        event = 
+        (element.x < asteroid.x + asteroid.width &&         // check left side of element (ship or bullet)
+        element.x + element.width > asteroid.x &&           // check right side
+        element.y < asteroid.y + asteroid.height &&          // check top side
+        element.y + element.height > asteroid.y)            // check bottom side
+
+        if (event) {
+            clearInterval(frameId);
+            clearInterval(asteroidsId);
+            alert("Game Over");
+            window.location.reload();
+          }
+
+    }
+
     // generate random asteroid origin coordinates, just outside and around the canvas
     function randomAsteroidOrigin () {
         asteroidPosX = Math.round(Math.random()*(canvas.width+2*asteroidWidth)) - asteroidWidth;            // created just outside the canvas
@@ -152,10 +172,10 @@ window.onload = function () {
     }
 
     //--------------------------------------------------------------------------------------------------------
-    //                                    Part 4: SetIntervals
+    //                                    Part 4: Start Game function
     //--------------------------------------------------------------------------------------------------------
 
-    // when start button clicked: loop animation and update
+    // when start button clicked: loop animation update and create asteroids
     function startGame () {
 
         // game loop
@@ -163,7 +183,7 @@ window.onload = function () {
         //frameId = requestAnimationFrame(startGame);
 
         // create new asteroids
-        asteroidsId = setInterval (createAsteroids, 1000);
+        asteroidsId = setInterval (createAsteroids, 500);
 
         console.log("Game started")
     }
