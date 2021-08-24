@@ -13,6 +13,9 @@ class Ship {
         this.color = color;
         this.angle = angle;
         this.center = [this.x + this.width/2, this.y + this.height/2];  // center of ship
+
+        this.speedX = 0;
+        this.speedY = 0;
     }
 
     draw () {
@@ -20,8 +23,9 @@ class Ship {
         this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
-    newPos () {
-        // to do: update ship angle
+    move () {
+        this.x += this.speedX;
+        this.y += this.speedY;
     }
 
     // rotate ship

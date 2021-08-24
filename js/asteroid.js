@@ -13,8 +13,8 @@ class Asteroid {
         this.color = color;
         this.direction = direction;
 
-        this.speedX = 2;
-        this.speedY = 2;
+        this.speedX = 4;
+        this.speedY = 4;
     }
 
     draw () {

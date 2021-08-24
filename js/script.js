@@ -76,10 +76,9 @@ window.onload = function () {
         updateCanvas();
         updateShip()
         updateAsteroids();
-
+        //gameOver();
         //test
-        console.log(asteroidsArray.length);
-
+        console.log("asteroids in array: ", asteroidsArray.length);
     }
 
     // update canvas
@@ -90,7 +89,7 @@ window.onload = function () {
 
     // update bird
     function updateShip () {
-        //ship.newPos()
+        ship.move()
         ship.draw();
     }   
 
@@ -99,7 +98,7 @@ window.onload = function () {
         asteroidsArray.forEach((asteroid) => {
             asteroid.draw();
             asteroid.move();
-            checkCollision(ship, asteroid, collision);
+            checkCollision(ship, asteroid);
             });
 
         removeAsteroids();
@@ -135,14 +134,14 @@ window.onload = function () {
     }
 
     // check for collisions 
-    function checkCollision (element, asteroid, event) {
-        event = 
+    function checkCollision (element, asteroid) {
+        collision = 
         (element.x < asteroid.x + asteroid.width &&         // check left side of element (ship or bullet)
         element.x + element.width > asteroid.x &&           // check right side
-        element.y < asteroid.y + asteroid.height &&          // check top side
-        element.y + element.height > asteroid.y)            // check bottom side
+        element.y < asteroid.y + asteroid.height &&         // check top side
+        element.y + element.height > asteroid.y);           // check bottom side
 
-        if (event) {
+        if (collision) {
             clearInterval(frameId);
             clearInterval(asteroidsId);
             alert("Game Over");
@@ -171,12 +170,45 @@ window.onload = function () {
         asteroidDirection = Math.random()*360;
     }
 
+    function keyPressed (event) {
+        event.preventDefault();
+        switch (event.keyCode) {
+            case 38: // up arrow
+            ship.speedY = -4;
+            break;
+            case 40: // down arrow
+            ship.speedY = 4;
+            break;
+            case 37: // left arrow
+            ship.speedX = -4;
+            break;
+            case 39: // right arrow
+            ship.speedX = 4;
+            break;
+        }
+    }
+
+    function keyReleased (event) {
+        switch (event.keyCode) {
+            case 38:            // up arrow
+            case 40:            // down arrow
+            ship.speedY = 0;
+            break;
+            case 37:            // left arrow
+            case 39:            // right arrow
+            ship.speedX = 0;
+            break;
+        }
+    }
+
     //--------------------------------------------------------------------------------------------------------
     //                                    Part 4: Start Game function
     //--------------------------------------------------------------------------------------------------------
 
     // when start button clicked: loop animation update and create asteroids
-    function startGame () {
+    function startGame (event) {
+        //disable start button 
+        event.currentTarget.disabled = true;
 
         // game loop
         frameId = setInterval(update, dt);
@@ -189,16 +221,27 @@ window.onload = function () {
     }
 
     //--------------------------------------------------------------------------------------------------------
-    //                                    Part 5: Event listeners
+    //                                    Part 5: Game Over function
     //--------------------------------------------------------------------------------------------------------
 
-    btnStart.addEventListener('click', (event) => {
-        
-        // Start the game
-        startGame();
-        event.currentTarget.disabled = true;
+    function gameOver () {
 
-      });
+    }
+
+    //--------------------------------------------------------------------------------------------------------
+    //                                    Part 6: Event listeners
+    //--------------------------------------------------------------------------------------------------------
+
+    // Start game when "start" button is clicked
+    btnStart.addEventListener('click', startGame);
+
+    // when kept pressed, the speed gets a value, when the key is released the speed value returns to zero
+    window.addEventListener('keydown', keyPressed);
+
+    window.addEventListener('keyup', keyReleased);
+
+
+
 
 
 };
