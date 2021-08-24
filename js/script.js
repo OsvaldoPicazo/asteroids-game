@@ -27,7 +27,7 @@ window.onload = function () {
     //--------------------------------------------------------------------------------------------------------
 
     const fps = 30;         // game framerate
-    const dt = 1000/30;     // delta time = 33ms, for the game setInterval
+    const dt = 1000/fps;     // delta time = 33ms, for the game setInterval
 
     //fixed background values
     const backgroundColor = 'black';
@@ -119,10 +119,15 @@ window.onload = function () {
     }
 
     function updateBullets () {
-        bulletsArray.forEach((bullet) => {
+        bulletsArray.forEach((bullet, i) => {
             bullet.draw();
             bullet.move();
+            asteroidsArray.forEach((asteroid, j) => {
+                checkHit(bullet, asteroid, i, j);
+            });
         });
+
+        removeBullets();
     }
     
     // create random asteroids
@@ -154,7 +159,8 @@ window.onload = function () {
         });
     }
 
-    // check for collisions 
+    // needs refactoring with function checkHit
+    // check for collisions
     function checkCollision (element, asteroid) {
         collision = 
         (element.x < asteroid.x + asteroid.width &&         // check left side of element (ship or bullet)
@@ -171,9 +177,9 @@ window.onload = function () {
 
     // generate random asteroid origin coordinates, just outside and around the canvas
     function randomAsteroidOrigin () {
-        asteroidPosX = Math.round(Math.random()*(canvas.width+2*asteroidWidth)) - asteroidWidth;            // created just outside the canvas
+        asteroidPosX = Math.round(Math.random()*(canvas.width+2*asteroidWidth)) - asteroidWidth;            // randomly created just outside the canvas
         if (asteroidPosX + asteroidWidth <= 0 || asteroidPosX >= canvas.width) {
-            asteroidPosY = Math.round(Math.random()*(canvas.height+2*asteroidHeight)) - asteroidHeight;     // if ouside canvas width then it is free to randomly create the position y
+            asteroidPosY = Math.round(Math.random()*(canvas.height+2*asteroidHeight)) - asteroidHeight;     // if posX outside canvas  then it is free to randomly create the position y
         } else {
             if (Math.round(Math.random()) * 2 -1 > 0) {
                 asteroidPosY = canvas.height                                                                 // if posX inside the canvas, then posY must be outside the canvas height
@@ -210,6 +216,35 @@ window.onload = function () {
         bulletsArray.push(bullet);
     }
 
+    // remove bullets from the array when they go outside the canvas
+    function removeBullets() {
+        bulletsArray = bulletsArray.filter(function (bullet) {
+            return (bullet.x > (-2*bullet.width) &&             // left limit
+            bullet.x < (canvas.width + 2*bullet.width) &&       // right limit
+            bullet.y > (-2*bullet.height) &&                    // top limit
+            bullet.y < (canvas.height + 2*bullet.height));      // bottom limit
+        });
+    }
+
+    // function to check if player destroys an asteroid
+    function checkHit (element, asteroid, indexI, indexJ) {
+        hit = 
+        (element.x < asteroid.x + asteroid.width &&         // check left side of element (ship or bullet)
+        element.x + element.width > asteroid.x &&           // check right side
+        element.y < asteroid.y + asteroid.height &&         // check top side
+        element.y + element.height > asteroid.y);           // check bottom side
+
+        // if there is a hit, remove the asteroid and bullet from their array
+        if (hit) {
+            bulletsArray.splice(indexI, 1);
+        
+            // remove asteroid too
+            asteroidsArray.splice(indexJ, 1);
+
+            // set hit flag back to false
+            hit = false;
+          };
+    }
 
     // handle keydown events
     function keyPressed (event) {
@@ -229,12 +264,11 @@ window.onload = function () {
             break;
             case 87:            // "w": shoot front bullets
                 if (event.repeat) {
-                    console.log("w key still pressed");
                     break;      // do nothing when event is in repeat mode
                 }
                 else {
-                    bulletsId = setInterval(createBullets, 250);   // start firing bullets
-                    console.log("shoot");
+                    createBullets();                                // create the first bullet
+                    bulletsId = setInterval(createBullets, 250);    // rapid fire bullets 
                     break;
                 }
         }
@@ -268,14 +302,12 @@ window.onload = function () {
 
         // game loop
         frameId = setInterval(update, dt);
-        //frameId = requestAnimationFrame(startGame);
 
         // create new asteroids
         asteroidsId = setInterval (createAsteroids, 500);
 
         //test
         console.log("Game started")
-
     }
 
     //--------------------------------------------------------------------------------------------------------
