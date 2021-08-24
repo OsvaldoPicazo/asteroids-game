@@ -27,7 +27,7 @@ window.onload = function () {
     //--------------------------------------------------------------------------------------------------------
 
     const fps = 30;         // game framerate
-    const dt = 1000/30;     // time delta = 33ms
+    const dt = 1000/30;     // delta time = 33ms, for the game setInterval
 
     //fixed background values
     const backgroundColor = 'black';
@@ -44,28 +44,41 @@ window.onload = function () {
     const asteroidHeight = 50;
     const asteroidColor = 'red';
 
+    // fixed bullet values
+    const bulletWidth = 10;
+    const bulletHeight = 20;
+    const bulletColor = 'yellow';
+
     //changing ship values
     let shipAngle = 0;     // in degrees
 
     // changing asteroid values
     let asteroidPosX = 0;
     let asteroidPosY = 0;
-    let asteroidDirection = 0;  // direction in degrees, 0 = X-axis 
+    let asteroidDirection = 0;  // direction in degrees, 0 = X-axis
+
+    // changing bullet values
+    let bulletPosX = 0;
+    let bulletPosY = 0;
+
+    // asteroids array, empty
+    let asteroidsArray = [];
+
+    // bullets array, empty
+    let bulletsArray = [];
 
     // flags
     let collision = false;      // true if asteroid hits ship
     let hit = false;            // true if bullet hits asteroid
 
     //setInterval IDs
-    let frameId = null;       // game loop
-    let asteroidsId = null;   // asteroid frequency
+    let frameId = null;         // game loop
+    let asteroidsId = null;     // asteroid
+    let bulletsId = null;       // bullet
 
     //Background, ship and asteroid objects
     const background = new Background (ctx, canvas.width, canvas.height, backgroundColor);
     const ship = new Ship (ctx, shipPosX, shipPosY, shipWidth, shipHeight, shipColor, shipAngle);
-
-    // asteroids array, empty
-    let asteroidsArray = [];
 
     //--------------------------------------------------------------------------------------------------------
     //                                    Part 3: Functions (game logic)
@@ -76,9 +89,10 @@ window.onload = function () {
         updateCanvas();
         updateShip()
         updateAsteroids();
-        //gameOver();
+        updateBullets();
+
         //test
-        console.log("asteroids in array: ", asteroidsArray.length);
+        console.log("bullets in array: ", bulletsArray.length);
     }
 
     // update canvas
@@ -102,6 +116,13 @@ window.onload = function () {
             });
 
         removeAsteroids();
+    }
+
+    function updateBullets () {
+        bulletsArray.forEach((bullet) => {
+            bullet.draw();
+            bullet.move();
+        });
     }
     
     // create random asteroids
@@ -141,11 +162,9 @@ window.onload = function () {
         element.y < asteroid.y + asteroid.height &&         // check top side
         element.y + element.height > asteroid.y);           // check bottom side
 
+        // IMPORTANT: if the ship crashes the game is Over
         if (collision) {
-            clearInterval(frameId);
-            clearInterval(asteroidsId);
-            alert("Game Over");
-            window.location.reload();
+            gameOver();
           }
 
     }
@@ -165,38 +184,75 @@ window.onload = function () {
         }
     }
 
-    // generate random direction 
+    // generate random asteroid direction 
     function randomAsteroidDirection () {
         asteroidDirection = Math.random()*360;
     }
 
+
+    // create bullets
+    function createBullets () {
+        
+        // bullet origin position on front part of ship
+        bulletPosX = ship.x + ship.width/2 - bulletWidth/2;
+        bulletPosY = ship.y;
+
+        let bullet = new Bullet (
+            ctx,
+            bulletPosX,   
+            bulletPosY,      
+            bulletWidth,
+            bulletHeight,
+            bulletColor
+        );
+        
+        // add bullets to its array
+        bulletsArray.push(bullet);
+    }
+
+
+    // handle keydown events
     function keyPressed (event) {
         event.preventDefault();
         switch (event.keyCode) {
-            case 38: // up arrow
-            ship.speedY = -4;
+            case 38:            // up arrow
+                ship.speedY = -4;
             break;
-            case 40: // down arrow
-            ship.speedY = 4;
+            case 40:            // down arrow
+                ship.speedY = 4;
             break;
-            case 37: // left arrow
-            ship.speedX = -4;
+            case 37:            // left arrow
+                ship.speedX = -4;
             break;
-            case 39: // right arrow
-            ship.speedX = 4;
+            case 39:            // right arrow
+                ship.speedX = 4;
             break;
+            case 87:            // "w": shoot front bullets
+                if (event.repeat) {
+                    console.log("w key still pressed");
+                    break;      // do nothing when event is in repeat mode
+                }
+                else {
+                    bulletsId = setInterval(createBullets, 250);   // start firing bullets
+                    console.log("shoot");
+                    break;
+                }
         }
     }
 
+    // handle keyup events
     function keyReleased (event) {
         switch (event.keyCode) {
             case 38:            // up arrow
             case 40:            // down arrow
-            ship.speedY = 0;
+                ship.speedY = 0;
             break;
             case 37:            // left arrow
             case 39:            // right arrow
-            ship.speedX = 0;
+                ship.speedX = 0;
+            break;
+            case 87:            // "w": stops shooting bullets
+                clearInterval(bulletsId);
             break;
         }
     }
@@ -217,7 +273,9 @@ window.onload = function () {
         // create new asteroids
         asteroidsId = setInterval (createAsteroids, 500);
 
+        //test
         console.log("Game started")
+
     }
 
     //--------------------------------------------------------------------------------------------------------
@@ -225,7 +283,11 @@ window.onload = function () {
     //--------------------------------------------------------------------------------------------------------
 
     function gameOver () {
-
+        clearInterval(frameId);
+        clearInterval(asteroidsId);
+        clearInterval(bulletsId);
+        alert("Game Over");
+        window.location.reload();
     }
 
     //--------------------------------------------------------------------------------------------------------
@@ -235,9 +297,10 @@ window.onload = function () {
     // Start game when "start" button is clicked
     btnStart.addEventListener('click', startGame);
 
-    // when kept pressed, the speed gets a value, when the key is released the speed value returns to zero
+    // keydown events
     window.addEventListener('keydown', keyPressed);
 
+    // key up events
     window.addEventListener('keyup', keyReleased);
 
 
