@@ -26,6 +26,9 @@ window.onload = function () {
     //                                    Part 2: create variables and objects
     //--------------------------------------------------------------------------------------------------------
 
+    const fps = 30;         // game framerate
+    const dt = 1000/30;     // time delta = 33ms
+
     //fixed background values
     const backgroundColor = 'black';
 
@@ -72,8 +75,11 @@ window.onload = function () {
         updateCanvas();
         updateShip()
         updateAsteroids();
-        //test
         removeAsteroids();
+
+        //test
+        console.log(asteroidsArray.length);
+
     }
 
     // update canvas
@@ -92,7 +98,7 @@ window.onload = function () {
     function updateAsteroids () {
         asteroidsArray.forEach((asteroid) => {
             asteroid.draw();
-          //asteroid.move();
+            asteroid.move();
             });
     }
     
@@ -152,17 +158,15 @@ window.onload = function () {
     // when start button clicked: loop animation and update
     function startGame () {
 
-        frameId = requestAnimationFrame(startGame);
+        // game loop
+        frameId = setInterval(update, dt);
+        //frameId = requestAnimationFrame(startGame);
 
-        //test loop
-        console.log(asteroidsArray.length);
-        //console.log("Game started")
+        // create new asteroids
+        asteroidsId = setInterval (createAsteroids, 1000);
 
-        update();
+        console.log("Game started")
     }
-
-    // create new asteroids
-    asteroidsId = setInterval (createAsteroids, 1000);
 
     //--------------------------------------------------------------------------------------------------------
     //                                    Part 5: Event listeners
@@ -170,13 +174,10 @@ window.onload = function () {
 
     btnStart.addEventListener('click', (event) => {
         
+        // Start the game
         startGame();
-
-        //testing only
-        console.log(asteroidPosX, asteroidPosY, asteroidDirection);
-        // end of test area
-
         event.currentTarget.disabled = true;
+
       });
 
 

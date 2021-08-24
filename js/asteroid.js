@@ -13,8 +13,8 @@ class Asteroid {
         this.color = color;
         this.direction = direction;
 
-        this.speedX = 0;
-        this.speedY = 0;
+        this.speedX = 1;
+        this.speedY = 1;
     }
 
     draw () {
@@ -22,9 +22,9 @@ class Asteroid {
         this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
-    newPos () {
-        this.x += this.speedX;
-        this.y += this.speedY;
+    move () {
+        this.x += (this.speedX) * Math.cos(this.direction * Math.PI / 180);
+        this.y += -(this.speedY) * Math.sin(this.direction * Math.PI / 180);
     }
 
 }
