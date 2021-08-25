@@ -35,20 +35,20 @@ window.onload = function () {
     const backgroundColor = 'black';
 
     // fixed ship values
-    const shipWidth = 50;
-    const shipHeight = 50;
+    const shipWidth = 75;
+    const shipHeight = 75;
     const shipPosX =  (canvas.width/2) - (shipWidth/2);
     const shipPosY =  (canvas.height/2) - (shipHeight/2);
     const shipColor = 'white';
 
     // fixed asteroid values
-    const asteroidWidth = 50;
-    const asteroidHeight = 50;
+    const asteroidWidth = 75;
+    const asteroidHeight = 75;
     const asteroidColor = 'red';
 
     // fixed bullet values
-    const bulletWidth = 10;
-    const bulletHeight = 20;
+    const bulletWidth = 6;
+    const bulletHeight = 18;
     const bulletColor = 'yellow';
 
     //changing ship values

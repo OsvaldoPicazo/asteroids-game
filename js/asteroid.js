@@ -2,6 +2,9 @@
 //                                    Asteroid class
 //------------------------------------------------------------------------------------------------------------
 
+const asteroidImg = document.createElement('img');
+asteroidImg.src = '../images/asteroid.png';
+
 class Asteroid {
 
     constructor (canvasContext, positionX, positionY, width, height, color, direction) {
@@ -18,8 +21,9 @@ class Asteroid {
     }
 
     draw () {
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        this.ctx.drawImage(asteroidImg, this.x, this.y, this.width, this.height);
+        //this.ctx.fillStyle = this.color;
+        //this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
     move () {

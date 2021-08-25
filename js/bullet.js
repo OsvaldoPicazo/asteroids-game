@@ -2,6 +2,9 @@
 //                                    Bullet class
 //------------------------------------------------------------------------------------------------------------
 
+const bulletImg = document.createElement('img');
+bulletImg.src = '../images/bullet.png';
+
 class Bullet {
 
     constructor (canvasContext, positionX, positionY, width, height, color) {
@@ -19,8 +22,9 @@ class Bullet {
     }
 
     draw () {
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        this.ctx.drawImage(bulletImg, this.x, this.y, this.width, this.height);
+        //this.ctx.fillStyle = this.color;
+        //this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
     move () {

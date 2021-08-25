@@ -2,6 +2,9 @@
 //                                    Ship class
 //------------------------------------------------------------------------------------------------------------
 
+const shipImg = document.createElement('img');
+shipImg.src = '../images/ship.png';
+
 class Ship {
 
     constructor (canvasContext, positionX, positionY, width, height, color, angle) {
@@ -19,8 +22,9 @@ class Ship {
     }
 
     draw () {
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        this.ctx.drawImage(shipImg, this.x, this.y, this.width, this.height);
+        //this.ctx.fillStyle = this.color;
+        //this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
     move () {

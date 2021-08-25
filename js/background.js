@@ -2,6 +2,9 @@
 //                                    Background class
 //------------------------------------------------------------------------------------------------------------
 
+const backgroundImg = document.createElement('img');
+backgroundImg.src = '../images/background.png';
+
 class Background {
 
     constructor (canvasContext, width, height, color) {
@@ -14,8 +17,9 @@ class Background {
     }
 
     draw () {
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.width, this.height);
+        this.ctx.drawImage(backgroundImg, this.x, this.y, this.width, this.height);
+        //this.ctx.fillStyle = this.color;
+        //this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
 }
