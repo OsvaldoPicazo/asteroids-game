@@ -3,7 +3,7 @@
 //------------------------------------------------------------------------------------------------------------
 
 const backgroundImg = document.createElement('img');
-backgroundImg.src = '../images/background.png';
+backgroundImg.src = './images/background.png';
 
 class Background {
 

@@ -3,7 +3,7 @@
 //------------------------------------------------------------------------------------------------------------
 
 const asteroidImg = document.createElement('img');
-asteroidImg.src = '../images/asteroid.png';
+asteroidImg.src = './images/asteroid.png';
 
 class Asteroid {
 

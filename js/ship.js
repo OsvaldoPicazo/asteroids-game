@@ -3,7 +3,7 @@
 //------------------------------------------------------------------------------------------------------------
 
 const shipImg = document.createElement('img');
-shipImg.src = '../images/ship.png';
+shipImg.src = './images/ship.png';
 
 class Ship {
 

@@ -3,7 +3,7 @@
 //------------------------------------------------------------------------------------------------------------
 
 const bulletImg = document.createElement('img');
-bulletImg.src = '../images/bullet.png';
+bulletImg.src = './images/bullet.png';
 
 class Bullet {
 
