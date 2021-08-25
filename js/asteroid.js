@@ -15,6 +15,7 @@ class Asteroid {
         this.height = height;
         this.color = color;
         this.direction = direction;
+        this.center = [this.x + this.width/2, this.y + this.height/2];  // center of ship
 
         this.speedX = 6;
         this.speedY = 6;
@@ -29,6 +30,7 @@ class Asteroid {
     move () {
         this.x += (this.speedX) * Math.cos(this.direction * Math.PI / 180);
         this.y += -(this.speedY) * Math.sin(this.direction * Math.PI / 180);
+        this.center = [this.x + this.width/2, this.y + this.height/2];
     }
 
 }

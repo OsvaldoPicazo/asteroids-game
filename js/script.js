@@ -92,14 +92,14 @@ window.onload = function () {
         updateShip()
         updateAsteroids();
         updateBullets();
-        checkCollision();
-        //checkHit();
+        //checkCollision();
+        checkCollisionFromCenter();
 
         //test
         console.log("bullets: ", bulletsArray.length);
         console.log("asteroids: ", asteroidsArray.length);
         console.log("score: ", score);
-        //console.log("bulletsId: ", bulletsId);
+        //console.log("ship center:", ship.center );
     }
 
     // update canvas
@@ -137,7 +137,7 @@ window.onload = function () {
             asteroidsArray.forEach((asteroid, j) => {
                 checkHit(bullet, asteroid, i, j);       // check collision for each bullet-asteroid combination
             });
-           
+         
         //----------------------------------------------------------------------
         
         });
@@ -148,7 +148,7 @@ window.onload = function () {
     // NOT WORKING, needs to be fixed !!!
     /*
     // function to check if player destroys an asteroid
-    function checkHit() {
+    function checkHitTwo() {
         for(let i = 0; i < asteroidsArray.length; i++) {
             for(let j = 0; j < bulletsArray.length; j++) {
                 const asteroid = asteroidsArray[i];
@@ -195,7 +195,7 @@ window.onload = function () {
             if (score === winScore) {
                 winGame();      // if you reach the win score the game finishes
             }
-            };
+        }
     }
     
     
@@ -249,6 +249,22 @@ window.onload = function () {
                 gameOver();
               }
         });
+    }
+
+    // alternative function, consider asteroids and spaceship as circles
+    function checkCollisionFromCenter () {
+        asteroidsArray.forEach((asteroid) => {
+            const distanceX = asteroid.center[0] - ship.center[0];
+            const distanceY = asteroid.center[1] - ship.center[1];
+            const distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));    // get distance from center of asteroid to center of spaceship
+            
+            collision = distance < (asteroid.width/2 + ship.width/2);       // if the distance is smaller than the sum of both radius, there is a collision
+
+            // IMPORTANT: if the ship crashes the game is Over
+            if (collision) {
+                gameOver();
+                }
+        })
     }
 
     // generate random asteroid origin coordinates, just outside and around the canvas
@@ -312,16 +328,20 @@ window.onload = function () {
         event.preventDefault();
         switch (event.keyCode) {
             case 38:            // up arrow
-                ship.speedY = -6;
+                if (ship.speedY > -ship.speedLimit) ship.accelerationY = -0.25;
+                //ship.speedY = -6;
             break;
             case 40:            // down arrow
-                ship.speedY = 6;
+                if (ship.speedY < ship.speedLimit) ship.accelerationY = 0.25;
+                //ship.speedY = 6;
             break;
             case 37:            // left arrow
-                ship.speedX = -6;
+                if (ship.speedX > -ship.speedLimit) ship.accelerationX = -0.25;
+                //ship.speedX = -6;
             break;
             case 39:            // right arrow
-                ship.speedX = 6;
+                if (ship.speedX < ship.speedLimit) ship.accelerationX = 0.25;
+                //ship.speedX = 6;
             break;
             case 87:            // "w": shoot front bullets
                 if (event.repeat) {
@@ -340,11 +360,13 @@ window.onload = function () {
         switch (event.keyCode) {
             case 38:            // up arrow
             case 40:            // down arrow
-                ship.speedY = 0;
+                ship.accelerationY = 0;
+                //ship.speedY = 0;
             break;
             case 37:            // left arrow
             case 39:            // right arrow
-                ship.speedX = 0;
+                ship.accelerationX = 0;
+                //ship.speedX = 0;
             break;
             case 87:            // "w": stops shooting bullets
                 clearInterval(bulletsId);
@@ -376,11 +398,13 @@ window.onload = function () {
     //--------------------------------------------------------------------------------------------------------
 
     function gameOver () {
-        clearInterval(frameId);
-        clearInterval(asteroidsId);
-        clearInterval(bulletsId);
-        alert("Game Over");
-        window.location.reload();
+        if (collision) {
+            clearInterval(frameId);
+            clearInterval(asteroidsId);
+            clearInterval(bulletsId);
+            alert("Game Over");
+            window.location.reload();
+        }
     }
 
     function winGame () {

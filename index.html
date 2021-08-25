@@ -4,16 +4,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="./styles/style.css" />
     <title>Asteroids Tribute</title>
   </head>
   <body>
-    <button id="start-button">Start</button>
-    <div>Move Spaceship with the arrow keys, shoot with "w"</div>
+    <!-- start page  -->
+    <section id="start-page">
+      <div id="title-box">
+        <div id="game-title">
+          <h1>ASTEROIDS</h1>
+        </div>
+        <button id="start-button">Start</button>
+        <div id="game-instrucitons">
+          <h2>Control the Spaceship with the arrow keys</h2>
+          <h2>Shoot the asteroids with 'w' key</h2>
+        </div>
+      </div>
 
+      <div id="footer-info">
+        <p>2021</p>
+      </div>
+    </section>
+
+    <!-- Game page -->
     <div id="game-page">
       <canvas id="my-canvas"> </canvas>
     </div>
+
+    <!-- Game over page -->
+    <section id="gameover-page"></section>
+
+    <!-- Game win page -->
+    <section id="win-page"></section>
 
     <script type="text/javascript" src="./js/background.js"></script>
     <script type="text/javascript" src="./js/ship.js"></script>

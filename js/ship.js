@@ -19,6 +19,10 @@ class Ship {
 
         this.speedX = 0;
         this.speedY = 0;
+        this.speedLimit = 6;
+
+        this.accelerationX = 0;
+        this.accelerationY = 0;
     }
 
     draw () {
@@ -28,8 +32,11 @@ class Ship {
     }
 
     move () {
+        this.speedX += this.accelerationX;
+        this.speedY += this.accelerationY;
         this.x += this.speedX;
         this.y += this.speedY;
+        this.center = [this.x + this.width/2, this.y + this.height/2];
     }
 
     // rotate ship
