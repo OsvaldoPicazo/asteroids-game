@@ -80,7 +80,7 @@ window.onload = function () {
 
     //Background, ship and asteroid objects
     const background = new Background (ctx, canvas.width, canvas.height, backgroundColor);
-    const ship = new Ship (ctx, shipPosX, shipPosY, shipWidth, shipHeight, shipColor, shipAngle);
+    const ship = new Ship (ctx, shipPosX, shipPosY, shipWidth, shipHeight, shipColor, canvas.width, canvas.height);
 
     //--------------------------------------------------------------------------------------------------------
     //                                    Part 3: Functions (game logic)
@@ -96,10 +96,10 @@ window.onload = function () {
         checkCollisionFromCenter();
 
         //test
-        console.log("bullets: ", bulletsArray.length);
-        console.log("asteroids: ", asteroidsArray.length);
-        console.log("score: ", score);
-        //console.log("ship center:", ship.center );
+        //console.log("bullets: ", bulletsArray.length);
+        //console.log("asteroids: ", asteroidsArray.length);
+        //console.log("score: ", score);
+        console.log("ship speed:", ship.speedX, ship.speedY );
     }
 
     // update canvas
@@ -110,8 +110,8 @@ window.onload = function () {
 
     // update bird
     function updateShip () {
-        ship.move()
         ship.draw();
+        ship.move();
     }   
 
     // update asteroids
@@ -258,7 +258,7 @@ window.onload = function () {
             const distanceY = asteroid.center[1] - ship.center[1];
             const distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));    // get distance from center of asteroid to center of spaceship
             
-            collision = distance < (asteroid.width/2 + ship.width/2);       // if the distance is smaller than the sum of both radius, there is a collision
+            collision = distance < (asteroid.width/2 + ship.width/2)*0.9;       // if the distance is smaller than the sum of both radius, there is a collision
 
             // IMPORTANT: if the ship crashes the game is Over
             if (collision) {
@@ -328,19 +328,23 @@ window.onload = function () {
         event.preventDefault();
         switch (event.keyCode) {
             case 38:            // up arrow
-                if (ship.speedY > -ship.speedLimit) ship.accelerationY = -0.25;
+                if (ship.speedY > -ship.speedLimit) ship.accelerationY = -0.30;
+                else ship.accelerationY = 0;
                 //ship.speedY = -6;
             break;
             case 40:            // down arrow
-                if (ship.speedY < ship.speedLimit) ship.accelerationY = 0.25;
+                if (ship.speedY < ship.speedLimit) ship.accelerationY = 0.30;
+                else ship.accelerationY = 0;
                 //ship.speedY = 6;
             break;
             case 37:            // left arrow
-                if (ship.speedX > -ship.speedLimit) ship.accelerationX = -0.25;
+                if (ship.speedX > -ship.speedLimit) ship.accelerationX = -0.30;
+                else ship.accelerationX = 0;
                 //ship.speedX = -6;
             break;
             case 39:            // right arrow
-                if (ship.speedX < ship.speedLimit) ship.accelerationX = 0.25;
+                if (ship.speedX < ship.speedLimit) ship.accelerationX = 0.30;
+                else ship.accelerationX = 0;
                 //ship.speedX = 6;
             break;
             case 87:            // "w": shoot front bullets

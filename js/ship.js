@@ -7,22 +7,26 @@ shipImg.src = './images/ship.png';
 
 class Ship {
 
-    constructor (canvasContext, positionX, positionY, width, height, color, angle) {
+    constructor (canvasContext, positionX, positionY, width, height, color, canvasWidth, canvasHeight) {
         this.ctx = canvasContext;
         this.x = positionX;
         this.y = positionY;
         this.width = width;
         this.height = height;
         this.color = color;
-        this.angle = angle;
+        this.canvasWidth = canvasWidth;
+        this.canvasHeight = canvasHeight;
         this.center = [this.x + this.width/2, this.y + this.height/2];  // center of ship
 
         this.speedX = 0;
         this.speedY = 0;
-        this.speedLimit = 6;
+        this.speedLimit = 10;
 
         this.accelerationX = 0;
         this.accelerationY = 0;
+
+        this.previousX = 0;
+        this.previousY = 0;
     }
 
     draw () {
@@ -34,8 +38,23 @@ class Ship {
     move () {
         this.speedX += this.accelerationX;
         this.speedY += this.accelerationY;
-        this.x += this.speedX;
-        this.y += this.speedY;
+
+        if (
+            this.x + this.width/2 < this.canvasWidth &&
+            this.x + this.width/2 > 0 &&
+            this.y + this.height/2 > 0 &&
+            this.y + this.height/2 < this.canvasHeight) {
+                this.previousX = this.x;
+                this.previousY = this.y;
+                this.x += this.speedX;
+                this.y += this.speedY;
+            } else {
+                this.x = this.previousX;
+                this.y = this.previousY;
+                this.speedX = 0;
+                this.speedY = 0;
+            }
+
         this.center = [this.x + this.width/2, this.y + this.height/2];
     }
 
