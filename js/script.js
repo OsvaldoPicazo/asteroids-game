@@ -92,11 +92,14 @@ window.onload = function () {
         updateShip()
         updateAsteroids();
         updateBullets();
+        checkCollision();
+        checkHit();
+
 
         //test
-        console.log("bullets: ", bulletsArray.length);
-        console.log("asteroids: ", asteroidsArray.length);
-        console.log("score: ", score);
+        //console.log("bullets: ", bulletsArray.length);
+        //console.log("asteroids: ", asteroidsArray.length);
+        //console.log("score: ", score);
         //console.log("bulletsId: ", bulletsId);
     }
 
@@ -117,26 +120,18 @@ window.onload = function () {
         asteroidsArray.forEach((asteroid) => {
             asteroid.draw();
             asteroid.move();
-            checkCollision(ship, asteroid);
             });
-
-        removeAsteroids();
+        removeAsteroidsOutOfCanvas();
     }
 
     // update bullets
     function updateBullets () {
-
         // iterate through each bullet
         bulletsArray.forEach((bullet, i) => {
             bullet.draw();
             bullet.move();
-            // iterate through each asteroid
-            asteroidsArray.forEach((asteroid, j) => {
-                checkHit(bullet, asteroid, i, j);       // check collision for each bullet-asteroid combination
-            });
         });
-
-        removeBullets();
+        removeBulletsOutOfCanvas();
     }
     
     // create random asteroids
@@ -159,29 +154,33 @@ window.onload = function () {
     }
 
     // remove obstacle from array: when the go too far away from the canvas
-    function removeAsteroids() {
-        asteroidsArray = asteroidsArray.filter(function (asteroid) {
-            return (asteroid.x > (-2*asteroid.width) &&             // left limit
-            asteroid.x < (canvas.width + 2*asteroid.width) &&       // right limit
-            asteroid.y > (-2*asteroid.height) &&                    // top limit
-            asteroid.y < (canvas.height + 2*asteroid.height));      // bottom limit
-        });
+    function removeAsteroidsOutOfCanvas() {
+        for(let i = 0; i < asteroidsArray.length; i++){
+            const asteroid = asteroidsArray[i]
+            if(
+                asteroid.x > canvas.width + 1 ||       // rigth limit
+                asteroid.x + asteroid.width < -1 ||    // left limit
+                asteroid.y > canvas.height +1 ||       // bottom limit
+                asteroid.y + asteroid.width < -1       // upper limit
+            ) asteroidsArray.splice(i, 1)
+        }
     }
 
     // needs refactoring with function checkHit
     // check for collisions
-    function checkCollision (element, asteroid) {
+    function checkCollision () {
+        for(const asteroid of asteroidsArray){
         collision = 
-        (element.x < asteroid.x + asteroid.width &&         // check left side of element (ship or bullet)
-        element.x + element.width > asteroid.x &&           // check right side
-        element.y < asteroid.y + asteroid.height &&         // check top side
-        element.y + element.height > asteroid.y);           // check bottom side
+        (ship.x < asteroid.x + asteroid.width &&         // check left side of element (ship or bullet)
+        ship.x + ship.width > asteroid.x &&           // check right side
+        ship.y < asteroid.y + asteroid.height &&         // check top side
+        ship.y + ship.height > asteroid.y);           // check bottom side
 
         // IMPORTANT: if the ship crashes the game is Over
         if (collision) {
             gameOver();
           }
-
+}
     }
 
     // generate random asteroid origin coordinates, just outside and around the canvas
@@ -226,33 +225,53 @@ window.onload = function () {
     }
 
     // remove bullets from the array when they go outside the canvas
-    function removeBullets() {
-        bulletsArray = bulletsArray.filter(function (bullet) {
-            return (bullet.x > -bullet.width &&     // left limit
-            bullet.x < canvas.width &&              // right limit
-            bullet.y > -bullet.height &&            // top limit
-            bullet.y < canvas.height);              // bottom limit
-        });
+    function removeBulletsOutOfCanvas() {
+        for(let i =0; i< bulletsArray.length; i++){
+            const bullet = bulletsArray[i];
+            if(
+                bullet.x > canvas.width + 1 ||       // rigth limit
+                bullet.x + bullet.width < -1 ||    // left limit
+                bullet.y > canvas.height +1 ||       // bottom limit
+                bullet.y + bullet.width < -1       // upper limit
+            ) bulletsArray.splice(i,1)
+        }
     }
 
     // function to check if player destroys an asteroid
-    function checkHit (element, asteroid, indexI, indexJ) {
-        hit = 
-        (element.x < asteroid.x + asteroid.width &&         // check left side of element (ship or bullet)
-        element.x + element.width > asteroid.x &&           // check right side
-        element.y < asteroid.y + asteroid.height &&         // check top side
-        element.y + element.height > asteroid.y);           // check bottom side
+    function checkHit() {
+        let hit = false;
 
+        for(let i=0; i < asteroidsArray.length; i++){
+        for(let j= 0; j < bulletsArray.length; j++){
+            
+        const asteroid = asteroidsArray[i]
+        const bullet = bulletsArray[j]
+        
+        hit = (
+            bullet.x < asteroid.x + asteroid.width &&   // left of bullet is inside right of asteroid
+            bullet.x + bullet.width > asteroid.x        // BUT right of bullet is inside left of asteroid
+        )
+        &&   
+        (
+            bullet.y < asteroid.y + asteroid.height &&
+            bullet.y + bullet.height > asteroid.y
+        );
+        
         // if there is a hit, remove the asteroid and bullet from their array
         if (hit) {
-            bulletsArray.splice(indexI, 1);
-            asteroidsArray.splice(indexJ, 1);
+            console.log("asteroid: ", asteroid, "hit bullet: ", bullet)
+            bulletsArray.splice(i, 1);
+            asteroidsArray.splice(j, 1);
             hit = false;    // set hit flag back to false
             score ++;       // increase score
             if (score === winScore) {
-                winGame();      // if you reach the win score the game finishes
+                //winGame();      // if you reach the win score the game finishes
             }
-          };
+            break;
+        };
+        }
+        if(hit) break;
+    }
     }
 
     // handle keydown events
