@@ -17,8 +17,8 @@ class Asteroid {
         this.direction = direction;
         this.center = [this.x + this.width/2, this.y + this.height/2];  // center of ship
 
-        this.speedX = 6;
-        this.speedY = 6;
+        this.speedX = 4;
+        this.speedY = 4;
     }
 
     draw () {

@@ -348,7 +348,7 @@ window.onload = function () {
                     break;      // do nothing when event is in repeat mode
                 }
                 else {
-                    bulletsId = setInterval(createBullets, 250);    // rapid fire bullets 
+                    //bulletsId = setInterval(createBullets, 250);    // rapid fire bullets 
                     createBullets();                                // create the first bullet
                     break;
                 }
