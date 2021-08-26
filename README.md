@@ -5,7 +5,7 @@ Play the game here: </br>
 ## Description
 Shoot the asteroids and try to stay alive! </br> 
 
-A rendition to the old school arcade game, with some different mechanics. Asteroids come at you from all directions, move your spaceship to avoid them! Master your spaceship driving skills: acceleration and inertia are hard to master. Destroy as many asteroids as you can! can you destroy 100s of them?
+A rendition to the old school arcade game. Asteroids come at you from all directions, move your spaceship to avoid them! Master your spaceship driving skills: acceleration and inertia are hard to master. Destroy as many asteroids as possible! Can you destroy 100s of them?
 
 ## MVP
 - Player moves horizontally and vertically
@@ -67,6 +67,30 @@ A rendition to the old school arcade game, with some different mechanics. Astero
 - script.js - set event listeners
 - script.js - homePage
 - script.js - startGame
-- script.js - 
+- script.js - createAsteroids 
+- script.js - update(loop)
+- script.js - clearRect
+- background.js - draw
+- ship.js - draw
+- ship.js - move
+- asteroid.js - draw
+- asteroid.js - move
+- bullet.js - draw
+- bullet.js - move
+- script.js - checkHit
+- script.js - checkCollision
+- script.js - updateScore
+- script.js - gameOver
+- script.js - winGame
+- script.js - restartGame
+
+## Additional Links
+
+### Trello
+
+[POM - Asteroids Game](https://trello.com/b/PHylsOBC/pom-asteroids-game)
+
+### Slides
+
 
 

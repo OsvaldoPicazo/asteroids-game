@@ -25,8 +25,6 @@ window.onload = function () {
     const canvas = document.getElementById("my-canvas");
     canvas.height = 768;
     canvas.width = 1024;
-    //canvas.height = window.innerHeight * 0.9;
-    //canvas.width = (1024 / 768) * canvas.height;
 
     const ctx = canvas.getContext('2d');
 
@@ -37,6 +35,34 @@ window.onload = function () {
     const btnWinRestart = document.getElementById("win-restart-button");
     const btnWinHome = document.getElementById("win-home-button");
 
+    // Resize game area to screen size
+    // It presents some problems when elements sizes are no proportional to the canvas size
+    // it presents problems when not using requestAnimationFrame
+
+    /*
+    function resizeGame(){
+        const newWidth = window.innerHeight * 0.9
+        const newHeight = (1024 / 768) * canvas.height 
+        
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        startPage.width = newWidth;
+        startPage.height = newHeight;
+
+
+        // gamePage.width = 
+        // gamePage.height =
+
+        gameOverPage.width = newWidth;
+        gameOverPage.height = newHeight;
+        
+        winPage.width = newWidth;
+        winPage.height = newHeight;   
+    }
+    window.addEventListener("resize", resizeGame)
+    */
+    
     //--------------------------------------------------------------------------------------------------------
     //                                    Part 2: create variables and objects
     //--------------------------------------------------------------------------------------------------------
