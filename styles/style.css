@@ -70,11 +70,17 @@ h1 {
 
 #gameOver-page h1 {
     color: rgb(232,35,77);
+    margin: 30px 0 30px 0;
     font-size: 5rem;
 }
 
 #win-page h1 {
     color: rgb(255,231,44);
+    margin: 30px 0 30px 0;
     font-size: 5rem;
 }
 
+#gameOver-page h2, #win-page h2 {
+    font-size: 4rem;
+    margin: 30px 0 30px 0;
+}

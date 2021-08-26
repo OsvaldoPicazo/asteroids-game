@@ -18,6 +18,8 @@ window.onload = function () {
     const gamePage = document.getElementById("game-page");
     const gameOverPage = document.getElementById("gameOver-page");
     const winPage = document.getElementById("win-page");
+    const gameOverScore = document.getElementById("game-over-score");
+    const gameWinScore = document.getElementById("game-win-score");
 
     // create canvas dom element and its context
     const canvas = document.getElementById("my-canvas");
@@ -104,6 +106,7 @@ window.onload = function () {
         updateBullets();
         //checkCollision();
         checkCollisionFromCenter();
+        updateScore();
 
         //test
         //console.log("bullets: ", bulletsArray.length);
@@ -333,6 +336,12 @@ window.onload = function () {
         }
     }
 
+    function updateScore () {
+        ctx.font = "bold 70px Roboto";
+        ctx.fillStyle = 'white';
+        ctx.fillText(score, canvas.width - 150, 70);
+    }
+
     // handle keydown events
     function keyPressed (event) {
         event.preventDefault();
@@ -454,6 +463,7 @@ window.onload = function () {
             clearInterval(bulletsId);
             gameOverPage.style.display = 'block'
             gamePage.style.display = 'none';
+            gameOverScore.innerText = `Score: ${score}`;
             //alert("Game Over");
             //window.location.reload();
         }
@@ -465,6 +475,7 @@ window.onload = function () {
         clearInterval(bulletsId);
         gamePage.style.display = 'none';
         winPage.style.display = 'block';
+        gameWinScore.innerText = `You reached ${score} points`;
         //alert(`You win! ${winScore} asteroids destroyed`);
         //window.location.reload();
     }
