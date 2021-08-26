@@ -23,8 +23,11 @@ window.onload = function () {
 
     // create canvas dom element and its context
     const canvas = document.getElementById("my-canvas");
-    canvas.width = 1024;
     canvas.height = 768;
+    canvas.width = 1024;
+    //canvas.height = window.innerHeight * 0.9;
+    //canvas.width = (1024 / 768) * canvas.height;
+
     const ctx = canvas.getContext('2d');
 
     // button elements
