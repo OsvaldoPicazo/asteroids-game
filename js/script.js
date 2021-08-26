@@ -2,7 +2,7 @@
 //                                    Asteroids Game Tribute
 //------------------------------------------------------------------------------------------------------------
 // Created by: Osvaldo Picazo
-// Keywords: OOP, JS DOM Manipulation
+// Keywords: JavaScript, JS, OOP, DOM Manipulation, CSS/HTML
 
 
 
@@ -13,14 +13,23 @@ window.onload = function () {
     //                                    Part 1: define DOM elements
     //--------------------------------------------------------------------------------------------------------
 
+    // create DOM elements
+    const startPage = document.getElementById("start-page");
+    const gamePage = document.getElementById("game-page");
+    const gameOverPage = document.getElementById("gameOver-page");
+    const winPage = document.getElementById("win-page");
+
     // create canvas dom element and its context
     const canvas = document.getElementById("my-canvas");
     canvas.width = 1024;
     canvas.height = 768;
     const ctx = canvas.getContext('2d');
 
-    // start button element
+    // button elements
     const btnStart = document.getElementById("start-button");
+    const btnRestart = document.getElementById("restart-button");
+    const btnHome = document.getElementById("home-button");
+
 
     //--------------------------------------------------------------------------------------------------------
     //                                    Part 2: create variables and objects
@@ -83,7 +92,7 @@ window.onload = function () {
     const ship = new Ship (ctx, shipPosX, shipPosY, shipWidth, shipHeight, shipColor, canvas.width, canvas.height);
 
     //--------------------------------------------------------------------------------------------------------
-    //                                    Part 3: Functions (game logic)
+    //                                    Part 3: Define Functions (game logic)
     //--------------------------------------------------------------------------------------------------------
 
     // main update function that goes inside the game loop
@@ -379,13 +388,35 @@ window.onload = function () {
     }
 
     //--------------------------------------------------------------------------------------------------------
-    //                                    Part 4: Start Game function
+    //                                    Part 4: Define Start Game and restart game functions
     //--------------------------------------------------------------------------------------------------------
+
+    // Initialize Start Screen
+    function homePage () {
+        startPage.style.display = 'block';      // display html tag as block element
+        gamePage.style.display = 'none';        // hide html tag
+        gameOverPage.style.display = 'none';
+        winPage.style.display = 'none';
+        score = 0;
+        collision = false;
+        hit = false;
+        asteroidsArray.splice(0, asteroidsArray.length);
+        bulletsArray.splice(0, bulletsArray.length);
+        ship.x = shipPosX;
+        ship.y = shipPosY;
+        ship.speedX = 0;
+        ship.speedY = 0;
+    }
 
     // when start button clicked: loop animation update and create asteroids
     function startGame (event) {
         //disable start button 
-        event.currentTarget.disabled = true;
+        //event.currentTarget.disabled = true;
+        
+        gamePage.style.display = '';
+        startPage.style.display = 'none';
+        gameOverPage.style.display = 'none';
+        winPage.style.display = 'none';
 
         // game loop
         frameId = setInterval(update, dt);
@@ -397,8 +428,22 @@ window.onload = function () {
         console.log("Game started")
     }
 
+    function restartGame (event) {
+        //event.currentTarget.disabled = true;
+        score = 0;
+        collision = false;
+        hit = false;
+        asteroidsArray.splice(0, asteroidsArray.length);
+        bulletsArray.splice(0, bulletsArray.length);
+        ship.x = shipPosX;
+        ship.y = shipPosY;
+        ship.speedX = 0;
+        ship.speedY = 0;
+        startGame();
+    }
+
     //--------------------------------------------------------------------------------------------------------
-    //                                    Part 5: Game Over and Win functions
+    //                                    Part 5: Define Game Over and Win functions
     //--------------------------------------------------------------------------------------------------------
 
     function gameOver () {
@@ -406,8 +451,10 @@ window.onload = function () {
             clearInterval(frameId);
             clearInterval(asteroidsId);
             clearInterval(bulletsId);
-            alert("Game Over");
-            window.location.reload();
+            gameOverPage.style.display = 'block'
+            gamePage.style.display = '';
+            //alert("Game Over");
+            //window.location.reload();
         }
     }
 
@@ -415,16 +462,24 @@ window.onload = function () {
         clearInterval(frameId);
         clearInterval(asteroidsId);
         clearInterval(bulletsId);
-        alert(`You win! ${winScore} asteroids destroyed`);
-        window.location.reload();
+        gamePage.style.display = 'none';
+        winPage.style.display = 'block';
+        //alert(`You win! ${winScore} asteroids destroyed`);
+        //window.location.reload();
     }
 
     //--------------------------------------------------------------------------------------------------------
-    //                                    Part 6: Event listeners
+    //                                    Part 6: Set Event listeners
     //--------------------------------------------------------------------------------------------------------
 
     // Start game when "start" button is clicked
     btnStart.addEventListener('click', startGame);
+
+    // restart game after game over
+    btnRestart.addEventListener('click', restartGame);
+
+    // go to home screen
+    btnHome.addEventListener('click', homePage);
 
     // keydown events
     window.addEventListener('keydown', keyPressed);
@@ -432,7 +487,11 @@ window.onload = function () {
     // key up events
     window.addEventListener('keyup', keyReleased);
 
+    //--------------------------------------------------------------------------------------------------------
+    //                                    Part 6: Run Game!!!!
+    //--------------------------------------------------------------------------------------------------------
 
+    homePage();
 
 
 

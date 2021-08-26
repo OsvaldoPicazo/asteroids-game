@@ -39,17 +39,19 @@ class Ship {
         this.speedX += this.accelerationX;
         this.speedY += this.accelerationY;
 
+        // check if spaceship is inside the canvas
         if (
-            this.x + this.width/2 < this.canvasWidth &&
-            this.x + this.width/2 > 0 &&
-            this.y + this.height/2 > 0 &&
-            this.y + this.height/2 < this.canvasHeight) {
-                this.previousX = this.x;
+            this.x + this.width < this.canvasWidth &&   // right side of spaceship with right border of canvas
+            this.x > 0 &&                               // left side with left border of canvas
+            this.y > 0 &&                               // top side of ship with top side of canvas
+            this.y + this.height < this.canvasHeight)   // bottom side of ship with bottom side of canvas
+            {
+                this.previousX = this.x;    
                 this.previousY = this.y;
                 this.x += this.speedX;
                 this.y += this.speedY;
             } else {
-                this.x = this.previousX;
+                this.x = this.previousX;        // if space ship is outside, move it to its previous position and set velocity to zero
                 this.y = this.previousY;
                 this.speedX = 0;
                 this.speedY = 0;
