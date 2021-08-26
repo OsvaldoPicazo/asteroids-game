@@ -91,6 +91,7 @@ A rendition to the old school arcade game. Asteroids come at you from all direct
 [POM - Asteroids Game](https://trello.com/b/PHylsOBC/pom-asteroids-game)
 
 ### Slides
+[Google Slides - Asteroids Game](https://docs.google.com/presentation/d/11TRi9DvKzB8Lr0pMKDPTBneGka3n-aAQWqynRIpmj44/edit?usp=sharing)
 
 
 
