@@ -18,7 +18,7 @@ A rendition to the old school arcade game. Asteroids come at you from all direct
 - When the player reaches 100 points, the game ends
 
 ## Backlog
-- Choose your Characters/spaceships=
+- Choose your Characters/spaceships
 - Ability to turn/rotate spaceship, as in the original Asteroids game
 - Difficulty levels (increase asteroid rate of creation, speed, etc.)
 - Different asteroid sizes and speeds
