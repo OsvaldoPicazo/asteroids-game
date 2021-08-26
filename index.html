@@ -16,7 +16,7 @@
           <h1>A tribute to the arcade game</h1>
         </div>
         <button id="start-button" class="button">START</button>
-        <div id="game-instrucitons">
+        <div id="game-instructions">
           <h2>Control the Spaceship with the arrow keys</h2>
           <h2>Shoot the asteroids with 'w' key</h2>
         </div>
@@ -34,12 +34,21 @@
 
     <!-- Game over page -->
     <section id="gameOver-page">
-      <button id="restart-button">RESTART</button>
-      <button id="home-button">HOME</button>
+      <div class="box">
+        <h1>GAME OVER</h1>
+        <button id="restart-button" class="button">RESTART</button>
+        <button id="home-button" class="button">HOME</button>
+    </div>
     </section>
 
     <!-- Game win page -->
-    <section id="win-page"></section>
+    <section id="win-page">
+      <div class="box">
+        <h1>YOU WIN!</h1>
+        <button id="win-restart-button" class="button">RESTART</button>
+        <button id="win-home-button" class="button">HOME</button>
+      </div>
+    </section>
 
     <script type="text/javascript" src="./js/background.js"></script>
     <script type="text/javascript" src="./js/ship.js"></script>

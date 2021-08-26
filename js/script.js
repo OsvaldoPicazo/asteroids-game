@@ -29,7 +29,8 @@ window.onload = function () {
     const btnStart = document.getElementById("start-button");
     const btnRestart = document.getElementById("restart-button");
     const btnHome = document.getElementById("home-button");
-
+    const btnWinRestart = document.getElementById("win-restart-button");
+    const btnWinHome = document.getElementById("win-home-button");
 
     //--------------------------------------------------------------------------------------------------------
     //                                    Part 2: create variables and objects
@@ -107,8 +108,8 @@ window.onload = function () {
         //test
         //console.log("bullets: ", bulletsArray.length);
         //console.log("asteroids: ", asteroidsArray.length);
-        //console.log("score: ", score);
-        console.log("ship speed:", ship.speedX, ship.speedY );
+        console.log("score: ", score);
+        //console.log("ship speed:", ship.speedX, ship.speedY );
     }
 
     // update canvas
@@ -452,7 +453,7 @@ window.onload = function () {
             clearInterval(asteroidsId);
             clearInterval(bulletsId);
             gameOverPage.style.display = 'block'
-            gamePage.style.display = '';
+            gamePage.style.display = 'none';
             //alert("Game Over");
             //window.location.reload();
         }
@@ -478,8 +479,14 @@ window.onload = function () {
     // restart game after game over
     btnRestart.addEventListener('click', restartGame);
 
-    // go to home screen
+    // go to home screen after game over
     btnHome.addEventListener('click', homePage);
+
+    // restart game after game win
+    btnWinRestart.addEventListener('click', restartGame);
+
+    // go to home screen after game win
+    btnWinHome.addEventListener('click', homePage);
 
     // keydown events
     window.addEventListener('keydown', keyPressed);
