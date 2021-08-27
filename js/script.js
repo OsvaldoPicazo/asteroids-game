@@ -82,7 +82,7 @@ window.onload = function () {
 
     const fps = 30;         // game framerate
     const dt = 1000/fps;    // delta time = 33ms, for the game setInterval
-    const winScore = 10;    // score to win
+    const winScore = 200;    // score to win
     let score = 0;          // game score
 
     //fixed background values
