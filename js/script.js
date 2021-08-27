@@ -35,6 +35,19 @@ window.onload = function () {
     const btnWinRestart = document.getElementById("win-restart-button");
     const btnWinHome = document.getElementById("win-home-button");
 
+    // sounds
+    const bulletSound = new Audio('./sounds/bullet3.mp3');
+    const asteroidExplodeSound = new Audio('./sounds/asteroid-explode.mp3');
+    const startSequenceSound = new Audio('./sounds/spaceship-starts.mp3');
+    const spaceshipExplodeSound =  new Audio('./sounds/spaceship-explode.mp3');
+    const falconSound =  new Audio('./sounds/Millenium-Falcon.mp3');
+    const r2d2HappySound =  new Audio('./sounds/r2d2-happy.mp3');
+    const r2d2ScreamSound =  new Audio('./sounds/R2-screaming.mp3');
+    const chewieHappySound =  new Audio('./sounds/Chewbacca-happy.mp3');
+    const chewieScreamSound =  new Audio('./sounds/Chewbacca-scream.mp3');
+    const winSound = new Audio('./sounds/victory.mp3');
+
+
     // Resize game area to screen size
     // It presents some problems when elements sizes are no proportional to the canvas size
     // it presents problems when not using requestAnimationFrame
@@ -69,7 +82,7 @@ window.onload = function () {
 
     const fps = 30;         // game framerate
     const dt = 1000/fps;    // delta time = 33ms, for the game setInterval
-    const winScore = 100;    // score to win
+    const winScore = 10;    // score to win
     let score = 0;          // game score
 
     //fixed background values
@@ -234,6 +247,10 @@ window.onload = function () {
             asteroidsArray.splice(indexJ, 1);
             hit = false;    // set hit flag back to false
             score ++;       // increase score
+            playSound(asteroidExplodeSound);
+            if (score % 5 === 0) {
+                playSound(r2d2HappySound);
+            }
             if (score === winScore) {
                 winGame();      // if you reach the win score the game finishes
             }
@@ -291,7 +308,7 @@ window.onload = function () {
                 gameOver();
               }
         });
-    }
+    }    
 
     // alternative function, consider asteroids and spaceship as circles
     function checkCollisionFromCenter () {
@@ -371,6 +388,17 @@ window.onload = function () {
         ctx.fillText(score, canvas.width - 150, 70);
     }
 
+    function playSound (sound) {
+        sound.src = sound.src;       // rewriting the source file overplays the sound
+        sound.volume = 0.5;
+        sound.play(); 
+    }
+
+    function stopSound (sound) {
+        sound.pause();
+        sound.currentTime = 0;
+    }
+
     // handle keydown events
     function keyPressed (event) {
         event.preventDefault();
@@ -402,6 +430,7 @@ window.onload = function () {
                 else {
                     //bulletsId = setInterval(createBullets, 250);    // rapid fire bullets 
                     createBullets();                                // create the first bullet
+                    playSound(bulletSound);
                     break;
                 }
         }
@@ -421,7 +450,7 @@ window.onload = function () {
                 //ship.speedX = 0;
             break;
             case 87:            // "w": stops shooting bullets
-                clearInterval(bulletsId);
+                //clearInterval(bulletsId);
             break;
         }
     }
@@ -445,7 +474,11 @@ window.onload = function () {
         ship.y = shipPosY;
         ship.speedX = 0;
         ship.speedY = 0;
+
+        stopSound(winSound);
     }
+
+    
 
     // when start button clicked: loop animation update and create asteroids
     function startGame (event) {
@@ -465,6 +498,12 @@ window.onload = function () {
 
         //test
         console.log("Game started")
+
+        playSound(r2d2HappySound);
+        playSound(chewieHappySound);
+        playSound(startSequenceSound);
+
+        stopSound(winSound);
     }
 
     function restartGame (event) {
@@ -493,6 +532,10 @@ window.onload = function () {
             gameOverPage.style.display = 'block'
             gamePage.style.display = 'none';
             gameOverScore.innerText = `Score: ${score}`;
+            playSound(spaceshipExplodeSound);
+            playSound(r2d2ScreamSound);
+            playSound(chewieScreamSound);
+
             //alert("Game Over");
             //window.location.reload();
         }
@@ -505,6 +548,9 @@ window.onload = function () {
         gamePage.style.display = 'none';
         winPage.style.display = 'block';
         gameWinScore.innerText = `You reached ${score} points`;
+
+        playSound(winSound);
+
         //alert(`You win! ${winScore} asteroids destroyed`);
         //window.location.reload();
     }
